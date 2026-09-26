@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Visualization critique and D3.js redesign of Light-vented Bulbul observation records in China." />
+  <title>Light-vented Bulbul in China — Visualization Critique & Redesign</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="Back to top">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22"/><path d="M13 29c4-8 11-12 19-10 2 .5 4 1.5 6 3-4 1-7 2-10 5-3 3-7 5-15 2Z"/><circle cx="31" cy="22" r="1.7" class="eye"/><path d="M38 22l6 2-6 2Z"/><path d="M14 30c-1 4-3 6-6 7 4 1 8 0 11-3"/></svg>
+        </span>
+        <span>
+          <span class="eyebrow">STATS 401 · Individual project</span>
+          <strong>Light-vented Bulbul in China</strong>
+        </span>
+      </a>
+      <nav class="nav">
+        <a href="#original">Original</a>
+        <a href="#critique">Critique</a>
+        <a href="#redesign">Redesign</a>
+        <a href="#report">Report</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero page-width">
+      <div class="hero-copy">
+        <div class="eyebrow">Pycnonotus sinensis</div>
+        <h1>From a global abundance map to a <em>China-focused observation view.</em></h1>
+        <p class="lead">
+          I selected the Light-vented Bulbul geographic-range visualization on Oiseaux.net and redesigned its core view.
+          Instead of another hexbin abundance map, this redesign uses a province choropleth and a coordinated annual trend chart
+          to make regional comparison and temporal change easier to explore.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#redesign">Explore redesign</a>
+          <a class="button secondary" href="https://www.oiseaux.net/en/maps/light-vented.bulbul.html" target="_blank" rel="noopener">Open original ↗</a>
+        </div>
+      </div>
+      <div class="hero-side">
+        <div class="fact-card">
+          <span>Original</span>
+          <strong>Global hexbin map</strong>
+          <small>Observation counts encoded with spatial cells and color classes.</small>
+        </div>
+        <div class="fact-card emphasis">
+          <span>Redesign</span>
+          <strong>Choropleth + line chart</strong>
+          <small>Province-level comparison linked to yearly observation trends.</small>
+        </div>
+      </div>
+    </section>
+
+    <section id="original" class="section page-width">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">01 · Original visualization</div>
+          <h2>Oiseaux.net's global view</h2>
+        </div>
+        <span class="section-tag">Source review</span>
+      </div>
+
+      <div class="original-grid">
+        <article class="card original-card">
+          <div class="original-shot">
+            <div class="shot-toolbar">
+              <span class="toolbar-dot"></span>
+              <span>Original Oiseaux.net visualization</span>
+              <a href="https://www.oiseaux.net/en/maps/light-vented.bulbul.html" target="_blank" rel="noopener">Open full view ↗</a>
+            </div>
+            <div class="image-slot">
+              <img
+                src="assets/original-oiseaux.png"
+                alt="Screenshot of the original Oiseaux.net Light-vented Bulbul visualization"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+              />
+
+              <div class="image-fallback">
+                <strong>Original screenshot not found</strong>
+                <span>Save the screenshot as <code>assets/original-oiseaux.png</code>.</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3>What the original communicates</h3>
+            <p>
+              The original visualization is designed for a broad geographic-range task. It summarizes georeferenced observations
+              as hexagonal cells and uses color classes to communicate the concentration of occurrence records across space.
+            </p>
+            <div class="source-row">
+              <span class="source-pill">Oiseaux.net</span>
+              <a href="https://www.oiseaux.net/en/maps/light-vented.bulbul.html" target="_blank" rel="noopener">Light-vented Bulbul — geographic range ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <aside class="card context-card">
+          <div class="card-body">
+            <div class="eyebrow">Context</div>
+            <h3>Message, audience, tasks</h3>
+            <div class="context-item">
+              <span>Message</span>
+              <p>Where observations are concentrated within the species' broad geographic range.</p>
+            </div>
+            <div class="context-item">
+              <span>Audience</span>
+              <p>Birders, researchers, students, and readers seeking a fast geographic summary.</p>
+            </div>
+            <div class="context-item">
+              <span>Tasks</span>
+              <p>Locate concentrations, compare areas, and understand the overall range.</p>
+            </div>
+            <div class="context-warning">
+              <strong>Data interpretation</strong>
+              <p>Occurrence records are observations, not direct population estimates.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="critique" class="section section-muted">
+      <div class="page-width">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">02 · Critique</div>
+            <h2>Evaluating the original through visualization principles</h2>
+          </div>
+          <span class="section-tag">What · Why · How</span>
+        </div>
+
+        <div class="critique-grid">
+          <article class="critique-card strength">
+            <span class="number">01</span>
+            <div>
+              <div class="mini-label">Strength · Spatial aggregation</div>
+              <h3>Hexagons reduce overplotting without losing the broad pattern</h3>
+              <p>Individual observations would overlap heavily at this scale. Aggregating nearby records into hexagons reduces visual clutter while preserving the spatial structure needed to locate concentration.</p>
+              <div class="principle"><strong>Visualization principle:</strong> spatial aggregation improves readability when many marks occupy nearby locations.</div>
+            </div>
+          </article>
+
+          <article class="critique-card strength">
+            <span class="number">02</span>
+            <div>
+              <div class="mini-label">Strength · Color encoding</div>
+              <h3>Sequential color supports rapid magnitude scanning</h3>
+              <p>The map uses a light-to-dark intensity scale for an ordered quantity. Viewers can quickly find areas with relatively more records without reading every value.</p>
+              <div class="principle"><strong>Visualization principle:</strong> a sequential color channel is appropriate for showing ordered quantitative magnitude when exact lookup is not the primary task.</div>
+            </div>
+          </article>
+
+          <article class="critique-card opportunity">
+            <span class="number">03</span>
+            <div>
+              <div class="mini-label">Opportunity · Spatial extent</div>
+              <h3>The global frame weakens comparison within China</h3>
+              <p><strong>Problem:</strong> China occupies only part of a global map. <strong>Why it matters:</strong> the relevant regions receive less visual space, making within-China comparison harder. <strong>Improvement:</strong> use a China-focused map with provinces as explicit geographic units.</p>
+              <div class="principle"><strong>Visualization principle:</strong> devote display area and spatial resolution to the geography that matches the users' analytical task.</div>
+            </div>
+          </article>
+
+          <article class="critique-card opportunity">
+            <span class="number">04</span>
+            <div>
+              <div class="mini-label">Opportunity · Quantitative precision</div>
+              <h3>Coarse color classes weaken exact comparison</h3>
+              <p><strong>Problem:</strong> seven bins collapse different counts into the same visual category; for example, 50 and 249 records are visually equivalent. <strong>Why it matters:</strong> color categories support pattern detection better than precise numerical comparison. <strong>Improvement:</strong> keep color for overview and expose exact counts with interactive tooltips.</p>
+              <div class="principle"><strong>Visualization principle:</strong> use more precise channels or direct labeling when users need accurate quantitative lookup.</div>
+            </div>
+          </article>
+
+          <article class="critique-card opportunity">
+            <span class="number">05</span>
+            <div>
+              <div class="mini-label">Opportunity · Temporal encoding</div>
+              <h3>Time is absent from the main visual encoding</h3>
+              <p><strong>Problem:</strong> the map emphasizes where records occur but not when they were observed. <strong>Why it matters:</strong> two regions with similar totals can have very different observation histories. <strong>Improvement:</strong> add an annual line chart with year on the x-axis, using position to support temporal comparison.</p>
+              <div class="principle"><strong>Visualization principle:</strong> position along a common axis provides a more effective comparison channel for change over time.</div>
+            </div>
+          </article>
+
+          <article class="critique-card caution">
+            <span class="number">06</span>
+            <div>
+              <div class="mini-label">Interpretation · Data-to-visual mapping</div>
+              <h3>Record density should not be interpreted as population abundance</h3>
+              <p><strong>Problem:</strong> the page labels the view an “abundance map,” while the legend measures occurrences per hexagon. <strong>Why it matters:</strong> observer effort, accessibility, reporting practices, and data coverage can affect record density. <strong>Improvement:</strong> label the measure explicitly as GBIF occurrence records and state the sampling limitation next to the visual.</p>
+              <div class="principle"><strong>Visualization principle:</strong> the visual encoding should communicate the quantity actually measured by the data.</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="redesign" class="section redesign-section page-width">
+      <div class="redesign-intro">
+        <div class="eyebrow">03 · My redesign</div>
+        <h2>Two visualizations, two complementary questions.</h2>
+        <p>
+          The redesign deliberately changes the visual idiom: the original hexbin map is replaced by a province-level choropleth,
+          while a line chart adds an explicit temporal view. Clicking a province links the two views.
+        </p>
+        <div class="redesign-flow">
+          <span>Global hexbin</span><span class="arrow">→</span><strong>Province choropleth + annual trend</strong>
+        </div>
+      </div>
+
+      <div class="dashboard card">
+        <div class="dashboard-bar">
+          <div class="dashboard-title">
+            <div class="eyebrow">Interactive redesigned visualization</div>
+            <h3>Light-vented Bulbul observation records in China</h3>
+          </div>
+          <div class="dashboard-status" id="dataStatus">Loading local dataset…</div>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-control">
+            <label for="yearSelect">Map year</label>
+            <select id="yearSelect"></select>
+          </div>
+          <div class="selection-control">
+            <span>Selected province</span>
+            <strong id="selectedProvince">China overall</strong>
+            <button id="clearProvince" type="button">Clear</button>
+          </div>
+          <div class="headline-stat">
+            <span>Records in current map view</span>
+            <strong id="currentCount">—</strong>
+          </div>
+        </div>
+
+        <div class="visual-grid">
+          <div class="panel map-panel">
+            <div class="panel-heading">
+              <div>
+                <div class="eyebrow">01 · Choropleth</div>
+                <h4>Where are records concentrated?</h4>
+              </div>
+              <div class="legend-block">
+                <span>Fewer</span>
+                <span class="legend-gradient"></span>
+                <span>More</span>
+              </div>
+            </div>
+            <div id="mapWrap" class="map-wrap">
+              <div class="loading-layer" id="mapLoading"><span class="spinner"></span>Loading China boundaries…</div>
+              <svg id="map" role="img" aria-label="Province choropleth map of Light-vented Bulbul observation records in China"></svg>
+              <div id="mapTooltip" class="map-tooltip"></div>
+            </div>
+            <p class="panel-note">Color encodes the number of cleaned observation records assigned to each province for the selected year. Click a province to update the trend chart.</p>
+          </div>
+
+          <div class="panel trend-panel">
+            <div class="panel-heading">
+              <div>
+                <div class="eyebrow">02 · Line chart</div>
+                <h4>How have records changed over time?</h4>
+              </div>
+            </div>
+            <div class="trend-summary">
+              <strong id="trendTotal">—</strong>
+              <span id="trendLabel">records across all years</span>
+            </div>
+            <div id="trendWrap" class="trend-wrap">
+              <svg id="trend" role="img" aria-label="Annual line chart of Light-vented Bulbul observation records"></svg>
+              <div id="trendTooltip" class="trend-tooltip"></div>
+            </div>
+            <p class="panel-note">The line chart answers a different question from the map: when were records made, and how does the selected province compare with China overall?</p>
+          </div>
+        </div>
+
+        <div class="province-detail" id="provinceDetail">
+          <div>
+            <div class="eyebrow">Selected region</div>
+            <h4 id="detailTitle">China overall</h4>
+            <p id="detailText">Select a province on the map to focus the annual trend.</p>
+          </div>
+          <div class="detail-metrics">
+            <div><span>Total records</span><strong id="detailTotal">—</strong></div>
+            <div><span>First year</span><strong id="detailFirstYear">—</strong></div>
+            <div><span>Peak year</span><strong id="detailPeakYear">—</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="redesign-decisions">
+        <article>
+          <span>Decision 01</span>
+          <h3>Replace hexbin with province choropleth</h3>
+          <p>The geographic unit becomes a familiar administrative region, making region-to-region comparison more direct for a China-focused task.</p>
+        </article>
+        <article>
+          <span>Decision 02</span>
+          <h3>Encode time with a line chart</h3>
+          <p>Time becomes a visible position-based channel instead of an interaction layered on top of the same map encoding.</p>
+        </article>
+        <article>
+          <span>Decision 03</span>
+          <h3>Link the views through selection</h3>
+          <p>Clicking a province updates the line chart, so users can connect spatial concentration with a region's observation history.</p>
+        </article>
+      </div>
+
+      <div class="data-note">
+        <strong>Data note.</strong> The visualization reads the cleaned local file <code>data/bulbul_china.csv</code>.
+        The preprocessing script can ingest data from your <code>Final Group Project/data</code> directory and outputs a normalized file for this page.
+      </div>
+    </section>
+
+    <section id="report" class="section section-muted">
+      <div class="page-width">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">04 · Report draft</div>
+            <h2>Critique and redesign rationale</h2>
+          </div>
+          <span class="section-tag">Approx. 700 words</span>
+        </div>
+        <article class="report card">
+          <div class="card-body report-body">
+
+          <p>
+            The original visualization selected for this project is the Light-vented Bulbul geographic-range
+            visualization on Oiseaux.net. The page provides an abundance map and a distribution map, with the
+            abundance view based on georeferenced observations aggregated by GBIF into hexagonal cells. Its
+            primary message is geographic: viewers should see where records of <em>Pycnonotus sinensis</em>
+            are concentrated and understand the species’ broad geographic range. The intended audience includes
+            birdwatchers, researchers, students, and general readers who want a quick summary of the species'
+            distribution. The main tasks are locating concentrations, comparing areas, and understanding the
+            overall geographic pattern. The original visualization is particularly useful for obtaining a
+            broad spatial overview without requiring users to inspect individual observations.
+          </p>
+
+          <p>
+            The original visualization has several important strengths. First, its spatial aggregation reduces
+            overplotting. Rather than displaying every observation as an individual point, nearby observations
+            are summarized into hexagonal cells. This produces a compact spatial representation and makes broad
+            geographic patterns easier to detect. Second, its sequential color encoding supports rapid visual
+            scanning. Darker cells attract attention to areas with more occurrence records, which is well matched
+            to the task of locating spatial concentration. The original interface also supports zooming, allowing
+            users to move between a broad geographic overview and more local spatial detail. Together, these
+            choices make the visualization effective for a reader who primarily wants to understand the species'
+            overall geographic distribution.
+          </p>
+
+          <p>
+            However, the original visualization also has several opportunities for improvement. First, the global
+            geographic extent is useful for showing the species' broad range, but it is not optimized for comparing
+            regions within China. China occupies only part of the overall view, leaving relatively little visual
+            space for examining regional differences. Second, the abundance map uses seven broad occurrence-count
+            classes. These bins make the legend compact, but they reduce precision: for example, locations with
+            50 and 249 records fall into the same visual category even though the counts differ substantially.
+            Third, time is not a visible part of the main encoding. The map emphasizes where records occur, but
+            users cannot directly distinguish between regions with similar totals but very different observation
+            histories. These limitations make the original visualization strong for broad geographic exploration,
+            but less effective for detailed regional and temporal comparison. There is also an important
+            interpretation risk: although the page labels the view an “abundance map,” the displayed quantity is
+            occurrence records per hexagon rather than a direct estimate of bird population size. Record density
+            may also reflect observer activity, accessibility, reporting practices, and differences in data coverage.
+          </p>
+
+          <p>
+            The redesigned visualization addresses these issues through three major design decisions. First, the
+            original global hexbin representation is replaced with a <strong>China-focused provincial choropleth</strong>.
+            Each province becomes a familiar geographic unit, while color represents the number of GBIF occurrence
+            records in the selected view. This creates a different visual representation from the original and
+            gives substantially more screen space to the geography relevant to the project. It directly addresses
+            the difficulty of comparing regions within China. Second, the redesigned visualization provides
+            <strong>exact record counts through interactive tooltips</strong>. Color remains useful for overview and
+            pattern detection, while hovering over a province supports precise value lookup without requiring users
+            to infer an exact number from a categorical legend. Third, a <strong>coordinated annual line chart</strong>
+            is added to the map. When a province is selected, the line chart shows how its recorded observations vary
+            across years. The two views therefore divide the analytical tasks: the choropleth answers “where are
+            records concentrated?” while the line chart answers “when were those records observed?”
+          </p>
+
+          <p>
+            Compared with the original visualization, the redesigned visualization makes spatial comparison within
+            China and temporal exploration substantially easier. The original hexbin map is well suited to recognizing
+            broad spatial concentration across a large geographic range, whereas the provincial choropleth provides
+            clearer comparison among familiar administrative regions. The annual line chart adds information that is
+            not directly visible in the original spatial view, allowing users to distinguish regions with similar
+            totals but different observation histories. The coordinated interaction also lets users move from a
+            national overview to a specific province without leaving the same analytical context. The redesign does,
+            however, involve trade-offs. Provincial aggregation removes some of the fine-scale spatial detail present
+            in the original hexagonal representation, and the addition of a second visualization increases interaction
+            and cognitive complexity. Most importantly, the underlying data limitation remains: GBIF occurrence
+            records are documented observations rather than standardized estimates of population abundance. The
+            redesigned visualization therefore improves how the available observations can be explored, compared,
+            and interpreted, but it should not be treated as a direct map of the true number of birds.
+          </p>
+
+          <div class="references">
+            <h3>References</h3>
+
+            <p>
+              Oiseaux.net.
+              <em>Light-vented Bulbul — Geographic range.</em>
+              <a
+                href="https://www.oiseaux.net/en/maps/light-vented.bulbul.html"
+                target="_blank"
+                rel="noopener"
+              >
+                https://www.oiseaux.net/en/maps/light-vented.bulbul.html
+              </a>
+            </p>
+
+            <p>
+              GBIF Secretariat.
+              <em>Pycnonotus sinensis — species information and occurrence data.</em>
+              <a
+                href="https://www.gbif.org/species/2486150"
+                target="_blank"
+                rel="noopener"
+              >
+                https://www.gbif.org/species/2486150
+              </a>
+            </p>
+
+            <p>
+              GBIF Secretariat.
+              <em>Occurrence API documentation.</em>
+              <a
+                href="https://techdocs.gbif.org/en/openapi/v1/occurrence"
+                target="_blank"
+                rel="noopener"
+              >
+                https://techdocs.gbif.org/en/openapi/v1/occurrence
+              </a>
+            </p>
+
+            <p>
+              D3.js.
+              <em>Data-Driven Documents.</em>
+              <a
+                href="https://d3js.org/"
+                target="_blank"
+                rel="noopener"
+              >
+                https://d3js.org/
+              </a>
+            </p>
+          </div>
+
+        </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-width footer-inner">
+      <div><strong>Light-vented Bulbul in China</strong><span>Visualization Critique and Redesign</span></div>
+      <div>Built with D3.js · Local cleaned dataset</div>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
